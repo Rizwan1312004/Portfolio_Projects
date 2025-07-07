@@ -1,12 +1,12 @@
 select *,
 row_number() over(partition by company, location, industry, total_laid_off, percentage_laid_off, `date`, stage, country, funds_raised_millions) as row_num
-from layoffs_staging;
+from layoffs;
 
 with duplicate_cte as
 (
 select *,
 row_number() over(partition by company, location, industry, total_laid_off, percentage_laid_off, `date`, stage, country, funds_raised_millions) as row_num
-from layoffs_staging 
+from layoffs
 )
 select*
 from duplicate_cte
@@ -32,7 +32,7 @@ where row_num > 1;
 insert into layoffs_staging2
 select *,
 row_number() over(partition by company, location, industry, total_laid_off, percentage_laid_off, `date`, stage, country, funds_raised_millions) as row_num
-from layoffs_staging;
+from layoffs;
 
 update layoffs_staging2
 set company = trim(company);
